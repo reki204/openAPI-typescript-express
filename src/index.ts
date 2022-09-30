@@ -1,15 +1,14 @@
 import express from 'express';
 import morgan from 'morgan';
-const PORT: string | number = process.env.PORT || 8000;
+import Router from './routes';
+
 const app: express.Application = express();
+const PORT: string | number = process.env.PORT || 8000;
 
 app.use(express.json());
 app.use(morgan("tiny"));
 app.use(express.static('public'));
-
-app.get('/hello', async (req: express.Request, res: express.Response) => {
-  res.send({ message: 'hello' });
-});
+app.use(Router);
 
 app.listen(PORT, () => {
   console.log(`listening on ${PORT}`);
