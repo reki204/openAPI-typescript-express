@@ -1,7 +1,10 @@
 import express from 'express';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
+import 'reflect-metadata';
+
 import Router from './routes';
+import PostgresDataSource from './config/database';
 
 const app: express.Application = express();
 const PORT: string | number = process.env.PORT || 8000;
@@ -16,6 +19,13 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(undefined, {
 }));
 app.use(Router);
 
-app.listen(PORT, () => {
-  console.log(`listening on ${PORT}`);
-});
+PostgresDataSource.initialize()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`listening on ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.log("Unable to connect to db", err);
+    process.exit(1);
+  });

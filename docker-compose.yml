@@ -1,5 +1,11 @@
 version: "3"
 services:
+  db:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_DB=openapi-typescript-express
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
   web:
     build:
       context: .
@@ -9,7 +15,12 @@ services:
       - .:/usr/src/app
     stdin_open: true
     tty: true
-    environment:
-      TZ: Asia/Tokyo
     ports:
       - 8000:8000
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_DB=openapi-typescript-express
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=db
