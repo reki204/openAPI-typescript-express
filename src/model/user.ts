@@ -4,7 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Post } from './post';
 
 @Entity()
 export class User {
@@ -16,6 +18,9 @@ export class User {
 
   @Column()
   email!: string;
+
+  @OneToMany((_type) => Post, (post: Post) => post.user)
+  posts!: Array<Post>;
 
   @CreateDateColumn()
   createdAt!: Date;
